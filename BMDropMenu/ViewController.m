@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSMutableArray *menuData;
 
 @property (nonatomic, strong) BMMenuController *menuController;
+
+- (void)toggleMenu;
 @end
 
 #pragma mark - Implementation
@@ -25,28 +27,40 @@
     if (self = [super init]) {
         _menuData = [[NSMutableArray alloc] init];
 
-        [_menuData addObject:@{@"Title" : @"Image"}];
-        [_menuData addObject:@{@"Title" : @"Image"}];
-        [_menuData addObject:@{@"Title" : @"Image"}];
-        [_menuData addObject:@{@"Title" : @"Image"}];
-        [_menuData addObject:@{@"Title" : @"Image"}];
-        [_menuData addObject:@{@"Title" : @"Image"}];
+        [_menuData addObject:@{@"Title" : @"testIcon"}];
+        [_menuData addObject:@{@"Title" : @"testIcon"}];
+        [_menuData addObject:@{@"Title" : @"testIcon"}];
+
+        [_menuData addObject:@{@"Title" : @"testIcon"}];
+        [_menuData addObject:@{@"Title" : @"testIcon"}];
+        [_menuData addObject:@{@"Title" : @"testIcon"}];
+
+        _menuController = [[BMMenuController alloc] init];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(toggleMenu)];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    _menuController = [[BMMenuController alloc] init];
     _menuController.delegate = self;
     _menuController.dataSource = self;
 
     [self.view addSubview:_menuController.view];
+}
+
+- (void)toggleMenu {
+    if (_menuController.isVisible) {
+        [_menuController dismiss];
+    }
+    else {
+        [_menuController showFromNavigationBar:self.navigationController.navigationBar];
+    }
 }
 
 #pragma mark - BMMenuControllerDelegate

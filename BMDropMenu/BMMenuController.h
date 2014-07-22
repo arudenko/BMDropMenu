@@ -65,6 +65,13 @@
 - (void)show;
 
 /**
+ *  Method for showing the menu from the navigation bar
+ *
+ *  @param navigationBar UINavigationBar
+ */
+- (void)showFromNavigationBar:(UINavigationBar *)navigationBar;
+
+/**
  *  Method for hiding the menu.
  */
 - (void)dismiss;

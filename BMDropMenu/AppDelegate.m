@@ -31,7 +31,10 @@
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:imageToDisplay];
     [self.window addSubview:backgroundView];
 
-    [self.window setRootViewController:viewController];
+
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+
+    [self.window setRootViewController:navigationController];
     [self.window makeKeyAndVisible];
 
     return YES;
