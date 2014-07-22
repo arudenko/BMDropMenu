@@ -54,6 +54,15 @@
 @property (nonatomic, assign) id<BMMenuControllerDataSource> dataSource;
 
 /**
+ *  Initiates the menu controller with a blur stlye. Available styles: UIBlurEffectStyleExtraLight, UIBlurEffectStyleLight, UIBlurEffectStyleDark.
+ *
+ *  @param blurStyle UIBlurEffectStyle
+ *
+ *  @return BMMenuController
+ */
+- (instancetype)initWithBlurEffectStyle:(UIBlurEffectStyle)blurStyle;
+
+/**
  *  Indicates whether the menu is currently shown.
  */
 @property (nonatomic, assign) BOOL isVisible;

@@ -39,13 +39,12 @@
 
     CGFloat imageSize = 55.0;
     _imageView.frame = CGRectMake(self.frame.size.width / 2 - imageSize / 2, 25, imageSize, imageSize);
-
 }
 
 - (void)prepareForReuse {
 
-    // Code comes here
     _titleLabel.text = nil;
+    _imageView.image = nil;
 
     [super prepareForReuse];
 }

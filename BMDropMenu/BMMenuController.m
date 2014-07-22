@@ -45,6 +45,10 @@
 @implementation BMMenuController
 
 - (instancetype)init {
+    return [self initWithBlurEffectStyle:UIBlurEffectStyleDark];
+}
+
+- (instancetype)initWithBlurEffectStyle:(UIBlurEffectStyle)blurStyle {
     if (self = [super init]) {
 
         _isVisible = NO;
@@ -57,9 +61,9 @@
         _collectionView.backgroundColor = [UIColor clearColor];
 
         // Visual effect view for the blur background
-        _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+        _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:blurStyle]];
         [_visualEffectView.contentView addSubview:_collectionView];
-
+        
     }
     return self;
 }
