@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class BMMenuController, BMMenuItem;
+@class BMMenuController;
 
 #pragma mark - BMMenuController Delegate
 @protocol BMMenuControllerDelegate <NSObject>
@@ -27,19 +27,46 @@
 @protocol BMMenuControllerDataSource <NSObject>
 
 /**
- *  Datasource delegate method for asking menu item for the given indexPath.
+ *  Datasource delegate method for asking the menu item for the given indexPath. Provide and NSDictionary for the item key being the title, image name string as the value.
  *
  *  @param menuController BMMenuController. Instance of the menu controller
  *  @param indexPath      NSIndexPath of the item to be returned
  *
- *  @return BMMenuItem
+ *  @return NSDictionary @{"title":"image name"}
  */
-- (BMMenuItem *)menuController:(BMMenuController *)menuController menuItemForIndexPath:(NSIndexPath *)indexPath;
+- (NSDictionary *)menuController:(BMMenuController *)menuController menuItemForIndexPath:(NSIndexPath *)indexPath;
+
+/**
+ *  Datasource delegate method asking for the total number of menu item cells.
+ *
+ *  @param menuController BMMenuController. Instance of the menu controller
+ *
+ *  @return NSInteger. Total number of menu items in the menu.
+ */
+- (NSInteger)numberOfItemsInMenuController:(BMMenuController *)menuController;
 
 @end
 
 #pragma mark - Public Interface
 @interface BMMenuController : UIViewController
 
+@property (nonatomic, assign) id<BMMenuControllerDelegate> delegate;
+@property (nonatomic, assign) id<BMMenuControllerDataSource> dataSource;
+
+/**
+ *  Indicates whether the menu is currently shown.
+ */
+@property (nonatomic, assign) BOOL isVisible;
+
+#pragma mark - User Actions
+/**
+ *  Method for showing the menu.
+ */
+- (void)show;
+
+/**
+ *  Method for hiding the menu.
+ */
+- (void)dismiss;
 
 @end

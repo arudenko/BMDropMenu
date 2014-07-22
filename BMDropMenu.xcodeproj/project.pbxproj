@@ -14,6 +14,7 @@
 		0610A2A8197E8C7F00ECFEBD /* BMDropMenuTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0610A2A7197E8C7F00ECFEBD /* BMDropMenuTests.m */; };
 		0610A2B3197E8E1000ECFEBD /* BMMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0610A2B2197E8E1000ECFEBD /* BMMenuController.m */; };
 		0610A2B6197E8EBC00ECFEBD /* BMMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0610A2B5197E8EBC00ECFEBD /* BMMenuItem.m */; };
+		06F786B6197EDD51007AF7D7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F786B5197EDD51007AF7D7 /* ViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +42,8 @@
 		0610A2B2197E8E1000ECFEBD /* BMMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMMenuController.m; sourceTree = "<group>"; };
 		0610A2B4197E8EBC00ECFEBD /* BMMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMMenuItem.h; sourceTree = "<group>"; };
 		0610A2B5197E8EBC00ECFEBD /* BMMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMMenuItem.m; sourceTree = "<group>"; };
+		06F786B4197EDD51007AF7D7 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		06F786B5197EDD51007AF7D7 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +87,8 @@
 			children = (
 				0610A292197E8C7F00ECFEBD /* AppDelegate.h */,
 				0610A293197E8C7F00ECFEBD /* AppDelegate.m */,
+				06F786B4197EDD51007AF7D7 /* ViewController.h */,
+				06F786B5197EDD51007AF7D7 /* ViewController.m */,
 				0610A2B4197E8EBC00ECFEBD /* BMMenuItem.h */,
 				0610A2B5197E8EBC00ECFEBD /* BMMenuItem.m */,
 				0610A2B1197E8E1000ECFEBD /* BMMenuController.h */,
@@ -226,6 +231,7 @@
 				0610A294197E8C7F00ECFEBD /* AppDelegate.m in Sources */,
 				0610A291197E8C7F00ECFEBD /* main.m in Sources */,
 				0610A2B6197E8EBC00ECFEBD /* BMMenuItem.m in Sources */,
+				06F786B6197EDD51007AF7D7 /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,6 +420,7 @@
 				0610A2AD197E8C7F00ECFEBD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0610A2AE197E8C7F00ECFEBD /* Build configuration list for PBXNativeTarget "BMDropMenuTests" */ = {
 			isa = XCConfigurationList;
@@ -422,6 +429,7 @@
 				0610A2B0197E8C7F00ECFEBD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

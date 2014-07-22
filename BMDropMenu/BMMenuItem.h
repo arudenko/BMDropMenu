@@ -10,14 +10,20 @@
 
 @interface BMMenuItem : UICollectionViewCell
 
+@property (nonatomic, strong) UILabel *titleLabel;
+
+@property (nonatomic, strong) UIImageView *imageView;
+
 /* 
- Instantiate a BMMenuItem object using the title and icon provided.
+ Instantiate a BMMenuItem object using with provided frameRect.
  
- @param NSSting title
- @param UIImage icon
- 
+ @param CGRect
+
  @retun BMMenuItem
 */
-- (instancetype)initWithTitle:(NSString *)title icon:(UIImage *)icon;
+
+- (instancetype)initWithFrame:(CGRect)frameRect;
+
+
 
 @end

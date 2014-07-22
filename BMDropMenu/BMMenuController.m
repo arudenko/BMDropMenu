@@ -11,7 +11,7 @@
 
 
 #pragma mark - Private Interface
-@interface BMMenuController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface BMMenuController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 /**
  *  Collection view holding the menu items.
@@ -28,10 +28,34 @@
 #pragma mark - Implementation
 @implementation BMMenuController
 
+- (instancetype)init {
+    if (self = [super init]) {
+
+        // UICollectionView
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.backgroundColor = [UIColor clearColor];
+
+
+        // Visual effect view for the blur background
+        _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+        [_visualEffectView.contentView addSubview:_collectionView];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    [_collectionView registerClass:[BMMenuItem class] forCellWithReuseIdentifier:@"MenuItem"];
+
+    CGFloat maxHeight = ceilf([_dataSource numberOfItemsInMenuController:self] / 2) * (self.view.frame.size.width / 2 - 30) + 1;
+
+    _visualEffectView.frame = _collectionView.frame = CGRectMake(0, 0, self.view.frame.size.width, maxHeight);
+
+    [self.view addSubview:_visualEffectView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,30 +63,61 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - User Actions
+
+- (void)show {
+
+}
+
+- (void)dismiss {
+
+}
 
 #pragma mark - UICollectionView Delegate Methods
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
+    // TODO: some nice animation on selection
+
+    [_delegate menuController:self didSelectItemAtIndexPath:indexPath];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 0;
+    return [_dataSource numberOfItemsInMenuController:self];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *identifier = @"MenuCell";
+
+    NSDictionary *item = [_dataSource menuController:self menuItemForIndexPath:indexPath];
+
+    static NSString *identifier = @"MenuItem";
 
     BMMenuItem *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor clearColor];
 
-    return nil;
+//    cell.backgroundColor = [UIColor clearColor];
+    cell.titleLabel.text = [[item allKeys] firstObject];
+    cell.imageView.image = [UIImage imageNamed:[[item allValues] firstObject]];
+
+    return cell;
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeZero;
+    CGFloat size = self.view.frame.size.width / 2 - 1;
+    return CGSizeMake(size, size - 30);
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsZero;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 1;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 1;
 }
 
 @end
