@@ -28,12 +28,12 @@
         _menuData = [[NSMutableArray alloc] init];
 
         [_menuData addObject:@{@"Title" : @"testIcon"}];
-        [_menuData addObject:@{@"Title" : @"testIcon"}];
-        [_menuData addObject:@{@"Title" : @"testIcon"}];
+        [_menuData addObject:@{@"Title 2" : @"testIcon"}];
+        [_menuData addObject:@{@"Title 3" : @"testIcon"}];
 
-        [_menuData addObject:@{@"Title" : @"testIcon"}];
-        [_menuData addObject:@{@"Title" : @"testIcon"}];
-        [_menuData addObject:@{@"Title" : @"testIcon"}];
+        [_menuData addObject:@{@"Title 4" : @"testIcon"}];
+        [_menuData addObject:@{@"Title 5" : @"testIcon"}];
+        [_menuData addObject:@{@"Title 6" : @"testIcon"}];
 
         _menuController = [[BMMenuController alloc] init];
     }
@@ -42,6 +42,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.title = @"BMDropMenu";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(toggleMenu)];
 }
 
@@ -66,7 +68,7 @@
 #pragma mark - BMMenuControllerDelegate
 
 - (void)menuController:(BMMenuController *)menuController didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-
+    self.title = [[[_menuData objectAtIndex:indexPath.row] allKeys] firstObject];
 }
 
 #pragma mark - BMMenuControllerDataSource

@@ -23,12 +23,21 @@
  */
 @property (nonatomic, strong) UIVisualEffectView *visualEffectView;
 
+#pragma mark - Animations
+
 /**
  *  Animates the menu to the provided rect.
  *
  *  @param rect CGRect
  */
 - (void)animateViewToRect:(CGRect)rect;
+
+/**
+ *  Animates the passed item when it is selected by the user.
+ *
+ *  @param item BMMenuItem
+ */
+- (void)animateSelectingItem:(BMMenuItem *)item;
 
 @end
 
@@ -73,19 +82,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)animateViewToRect:(CGRect)rect {
-    [UIView animateWithDuration:0.5
-                          delay:0
-         usingSpringWithDamping:0.8
-          initialSpringVelocity:10
-                        options:UIViewAnimationOptionAllowAnimatedContent
-                     animations:^{
-                         _visualEffectView.frame = rect;
-                     } completion:^(BOOL finished) {
-                         // completed
-                     }];
-}
-
 #pragma mark - User Actions
 
 - (void)show {
@@ -109,9 +105,41 @@
     _isVisible = NO;
 }
 
+#pragma mark - Animations
+- (void)animateViewToRect:(CGRect)rect {
+    [UIView animateWithDuration:0.5
+                          delay:0
+         usingSpringWithDamping:0.8
+          initialSpringVelocity:10
+                        options:UIViewAnimationOptionAllowAnimatedContent
+                     animations:^{
+                         _visualEffectView.frame = rect;
+                     } completion:^(BOOL finished) {
+                         // completed
+                     }];
+}
+
+- (void)animateSelectingItem:(BMMenuItem *)item {
+
+    UIColor *originalBackground = item.backgroundColor;
+
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        item.backgroundColor = [UIColor colorWithWhite:0 alpha:0.7];
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            item.backgroundColor = originalBackground;
+        } completion:^(BOOL finished) {
+            [self dismiss];
+        }];
+    }];
+}
+
 #pragma mark - UICollectionView Delegate Methods
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    BMMenuItem *item = (BMMenuItem *)[collectionView cellForItemAtIndexPath:indexPath];
+    [self animateSelectingItem:item];
 
     // TODO: some nice animation on selection
     [_delegate menuController:self didSelectItemAtIndexPath:indexPath];
