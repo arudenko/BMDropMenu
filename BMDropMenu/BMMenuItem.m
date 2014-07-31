@@ -8,6 +8,7 @@
 
 #import "BMMenuItem.h"
 
+
 @implementation BMMenuItem
 
 - (instancetype)initWithFrame:(CGRect)frameRect {
@@ -17,8 +18,8 @@
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
 
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _titleLabel.textColor = [UIColor colorWithWhite:1 alpha:0.7];
-        _titleLabel.font = [UIFont systemFontOfSize:18];
+        _titleLabel.textColor = [UIColor colorWithWhite:1 alpha:0.9];
+        _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:16];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
 
         [self.contentView addSubview:_titleLabel];
@@ -45,7 +46,7 @@
 
     _titleLabel.text = nil;
     _imageView.image = nil;
-
+    
     [super prepareForReuse];
 }
 

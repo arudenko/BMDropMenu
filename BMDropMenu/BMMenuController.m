@@ -23,6 +23,9 @@
  */
 @property (nonatomic, strong) UIVisualEffectView *visualEffectView;
 
+@property (nonatomic, strong) UINavigationBar *navigationBar;
+
+
 #pragma mark - Animations
 
 /**
@@ -38,6 +41,14 @@
  *  @param item BMMenuItem
  */
 - (void)animateSelectingItem:(BMMenuItem *)item;
+
+/**
+ *  Animates the colours of the navigation bar.
+ *
+ *  @param tintColor  UIColor - tint color of the navbar
+ *  @param titleColor UIColor - color of the icons and title
+ */
+- (void)changeNavigationBarTintColor:(UIColor *)tintColor andTitleColor:(UIColor *)titleColor;
 
 @end
 
@@ -63,7 +74,11 @@
         // Visual effect view for the blur background
         _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:blurStyle]];
         [_visualEffectView.contentView addSubview:_collectionView];
-        
+
+        // Default colours
+        _navigationBarTintColor = [UIColor colorWithWhite:0 alpha:0.7];
+        _navigationBarTitleColor = [UIColor colorWithWhite:1 alpha:0.9];
+
     }
     return self;
 }
@@ -71,14 +86,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [_collectionView registerClass:[BMMenuItem class] forCellWithReuseIdentifier:@"MenuItem"];
-
-    CGFloat maxHeight = ceilf([_dataSource numberOfItemsInMenuController:self] / 2) * (self.view.frame.size.width / 2 - 30) + 1;
-
-    _visualEffectView.frame = CGRectMake(0, -maxHeight, self.view.frame.size.width, maxHeight);
-    _collectionView.frame = CGRectMake(0, 0, self.view.frame.size.width, maxHeight);
-
-    [self.view addSubview:_visualEffectView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -96,17 +103,40 @@
 }
 
 - (void)showFromNavigationBar:(UINavigationBar *)navigationBar {
-    CGRect visibleFrame = _visualEffectView.frame;
+
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    self.view.layer.zPosition = MAXFLOAT;
+    self.view.alpha = 0;
+    [keyWindow addSubview:self.view];
+
+    [_collectionView registerClass:[BMMenuItem class] forCellWithReuseIdentifier:@"MenuItem"];
+
+    CGFloat numberOfRows = ceilf([_dataSource numberOfItemsInMenuController:self] / 2.0);
+    CGFloat maxHeight = numberOfRows * (self.view.frame.size.width / 2.0 - 30.0) + 1.0;
+
+    self.view.frame = CGRectMake(0, -maxHeight, self.view.frame.size.width, maxHeight);
+    _visualEffectView.frame = CGRectMake(0, 0, self.view.frame.size.width, maxHeight);
+    _collectionView.frame = CGRectMake(0, 0, self.view.frame.size.width, maxHeight);
+
+    [self.view addSubview:_visualEffectView];
+
+    _navigationBar = navigationBar;
+
+    CGRect visibleFrame = self.view.frame;
     visibleFrame.origin.y = navigationBar.frame.origin.y + navigationBar.frame.size.height;
     [self animateViewToRect:visibleFrame];
     _isVisible = YES;
+
+    [self changeNavigationBarTintColor:_navigationBarTintColor andTitleColor:_navigationBarTitleColor];
 }
 
 - (void)dismiss {
-    CGRect hiddenFrame = _visualEffectView.frame;
-    hiddenFrame.origin.y = -hiddenFrame.size.height;
+    CGRect hiddenFrame = self.view.frame;
+    hiddenFrame.origin.y = 0-hiddenFrame.size.height;
     [self animateViewToRect:hiddenFrame];
     _isVisible = NO;
+
+    [self changeNavigationBarTintColor:_originalTintColor andTitleColor:_originalTitleColor];
 }
 
 #pragma mark - Animations
@@ -117,9 +147,14 @@
           initialSpringVelocity:10
                         options:UIViewAnimationOptionAllowAnimatedContent
                      animations:^{
-                         _visualEffectView.frame = rect;
+                         self.view.frame = rect;
+                         self.view.alpha = !self.view.alpha;
                      } completion:^(BOOL finished) {
                          // completed
+                         if (rect.origin.y < 0) {
+                             [_delegate menuControllerDidDismissMenu:self];
+                             [self.view removeFromSuperview];
+                         }
                      }];
 }
 
@@ -138,14 +173,30 @@
     }];
 }
 
+- (void)changeNavigationBarTintColor:(UIColor *)tintColor andTitleColor:(UIColor *)titleColor {
+
+    // Add transition to nav bar
+    CATransition *transition = [CATransition animation];
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionFade;
+    transition.duration = 0.5;
+    [_navigationBar.layer addAnimation:transition forKey:nil];
+
+    _navigationBar.barTintColor = tintColor;
+    _navigationBar.tintColor = titleColor;
+
+    NSMutableDictionary *textAttribs = [[NSMutableDictionary alloc] initWithDictionary:_navigationBar.titleTextAttributes];
+    [textAttribs setObject:titleColor forKey:NSForegroundColorAttributeName];
+
+    [_navigationBar setTitleTextAttributes:textAttribs];
+}
+
+
 #pragma mark - UICollectionView Delegate Methods
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-
     BMMenuItem *item = (BMMenuItem *)[collectionView cellForItemAtIndexPath:indexPath];
     [self animateSelectingItem:item];
-
-    // TODO: some nice animation on selection
     [_delegate menuController:self didSelectItemAtIndexPath:indexPath];
 }
 
@@ -158,7 +209,6 @@
     NSDictionary *item = [_dataSource menuController:self menuItemForIndexPath:indexPath];
 
     static NSString *identifier = @"MenuItem";
-
     BMMenuItem *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
 
     cell.titleLabel.text = [[item allKeys] firstObject];

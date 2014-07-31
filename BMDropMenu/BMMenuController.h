@@ -21,6 +21,8 @@
  */
 - (void)menuController:(BMMenuController *)menuController didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
 
+- (void)menuControllerDidDismissMenu:(BMMenuController *)menuController;
+
 @end
 
 #pragma mark - BMMenuController Delegate
@@ -66,6 +68,13 @@
  *  Indicates whether the menu is currently shown.
  */
 @property (nonatomic, assign) BOOL isVisible;
+
+// Properties to customise the appereance of the navigation bar
+@property (nonatomic, strong) UIColor *navigationBarTintColor;
+@property (nonatomic, strong) UIColor *navigationBarTitleColor;
+
+@property (nonatomic, strong) UIColor *originalTintColor;
+@property (nonatomic, strong) UIColor *originalTitleColor;
 
 #pragma mark - User Actions
 /**

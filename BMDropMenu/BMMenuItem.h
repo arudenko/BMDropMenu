@@ -14,13 +14,13 @@
 
 @property (nonatomic, strong) UIImageView *imageView;
 
-/* 
+/*
  Instantiate a BMMenuItem object using with provided frameRect.
- 
+
  @param CGRect
 
  @retun BMMenuItem
-*/
+ */
 
 - (instancetype)initWithFrame:(CGRect)frameRect;
 
